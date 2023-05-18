@@ -5,4 +5,15 @@ const sequelize = new Sequelize("greeneco_db", "root", "Tin@1542002", {
   host: "localhost",
 });
 
-module.exports = sequelize;
+const connectionDatabase = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+};
+
+connectionDatabase();
+
+// module.exports = sequelize;
