@@ -1,10 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-require("./util/database");
+require("./src/utils/database");
 
-const shopController = require("./controller/shopController");
-const adminController = require("./controller/adminController");
+const adminRoutes = require("./src/routes/admin");
+const shopRoutes = require("./src/routes/shop");
 
 const app = express();
 
@@ -18,13 +18,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", (req, res, next) => {
-  res.status(200).send("hello world");
-});
-
-app.use("/ab*cd", (req, res, next) => {
-  res.status(201).send("ab*cd");
-});
+app.use(shopRoutes);
 
 const listener = app.listen(process.env.PORT, () => {
   console.log("Server is running on the port " + listener.address().port);
