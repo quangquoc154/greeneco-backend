@@ -7,24 +7,24 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
-      productId: {
-        type: Sequelize.STRING,
-        model: {
-          tableName: 'products',
-          schema: 'schema'
-        },
-        key: 'id'
-      }, 
-      userId: {
-        type: Sequelize.STRING,
-        model: {
-          tableName: 'users',
-          schema: 'schema'
-        },
-        key: 'id'
-      }, 
+      // productId: {
+      //   type: Sequelize.STRING,
+      //   model: {
+      //     tableName: 'products',
+      //     schema: 'schema'
+      //   },
+      //   key: 'id'
+      // }, 
+      // userId: {
+      //   type: Sequelize.STRING,
+      //   model: {
+      //     tableName: 'users',
+      //     schema: 'schema'
+      //   },
+      //   key: 'id'
+      // }, 
       rating: {
         type: Sequelize.STRING
       },
@@ -34,12 +34,12 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        // defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        // defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },

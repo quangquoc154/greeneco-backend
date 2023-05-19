@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  User.init(
+  Product.init(
     {
       title: DataTypes.STRING,
       price: DataTypes.FLOAT,

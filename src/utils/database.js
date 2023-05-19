@@ -1,8 +1,9 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize("greeneco_db", "root", "Tin@1542002", {
+const sequelize = new Sequelize("greeneco_db", "root", 'Tin@1542002', {
   dialect: "mysql",
   host: "localhost",
+  logging: false,
 });
 
 const connectionDatabase = async () => {
