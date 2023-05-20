@@ -11,11 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // Feedback.belongsToMany(models.Product, {
+      //   foreignKey: 'prodId',
+      //   targetKey: 'id',
+      //   as: 'prodData'
+      // })  
     }
   }
   Feedback.init({
-    productId: DataTypes.STRING,
-    userId: DataTypes.STRING,
+    productId: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER,
     rating: DataTypes.STRING,
     comment: DataTypes.TEXT
   }, {

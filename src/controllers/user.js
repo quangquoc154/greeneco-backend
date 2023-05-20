@@ -8,8 +8,7 @@ const getCurrentUser = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      err: -1,
-      mes: "Internal Server Error",
+      message: "Internal Server Error",
     });
   }
 };

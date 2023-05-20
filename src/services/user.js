@@ -12,8 +12,7 @@ exports.getUser = async (userId) => {
       ],
     });
     return {
-      err: user ? 0 : 1,
-      mes: user ? "Get successfully" : "User not found",
+      message: user ? "Get successfully" : "User not found",
       userData: user,
     };
   } catch (error) {

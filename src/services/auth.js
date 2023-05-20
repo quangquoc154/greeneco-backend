@@ -25,8 +25,7 @@ const register = async ({ email, password }) => {
         )
       : null;
     return {
-      err: created ? 0 : 1,
-      mes: created ? "Register is successfully" : "Email is used",
+      message: created ? "Register is successfully" : "Email is used",
       accessToken: token ? `Bearer ${token}` : token,
     };
   } catch (error) {
@@ -36,13 +35,11 @@ const register = async ({ email, password }) => {
 
 const login = async ({ email, password }) => {
   try {
-    a = 1
     const user = await db.User.findOne({
       where: { email },
       raw: true,
     });
-    const isChecked =
-      user && bcrypt.compareSync(password, user.password);
+    const isChecked = user && bcrypt.compareSync(password, user.password);
     const token = isChecked
       ? jwt.sign(
           {
@@ -55,8 +52,7 @@ const login = async ({ email, password }) => {
         )
       : null;
     return {
-      err: token ? 0 : 1,
-      mes: token
+      message: token
         ? "Login is successfully"
         : user
         ? "Password was incorrect"
@@ -70,5 +66,5 @@ const login = async ({ email, password }) => {
 
 module.exports = {
   login,
-  register
-}
+  register,
+};

@@ -7,22 +7,22 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.BIGINT,
-      },
-      name: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.INTEGER,
       },
       email: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING,
       },
       password: {
         type: Sequelize.STRING,
       },
+      name: {
+        type: Sequelize.STRING(50),
+      },
       address: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.STRING,
       },
       phone: {
-        type: Sequelize.STRING(10),
+        type: Sequelize.STRING(20),
       },
       roleCode: {
         type: Sequelize.STRING,

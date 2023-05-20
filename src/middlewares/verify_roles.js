@@ -3,7 +3,7 @@ exports.isAdmin = (req, res, next) => {
   if (roleCode !== "R1") {
     return res.status(401).json({
       err: 1,
-      mes: "Require role admin",
+      message: "Require role admin",
     });
   }
   next();
@@ -14,7 +14,7 @@ exports.isAdmin = (req, res, next) => {
 //   if (roleCode !== "R2") {
 //     return res.status(401).json({
 //       err: 1,
-//       mes: "Require role user",
+//       message: "Require role user",
 //     });
 //   }
 //   next();

@@ -5,14 +5,14 @@ const verifyToken = (req, res, next) => {
   if (!token)
     return res.status(401).json({
       err: 1,
-      mes: "Require authorization",
+      message: "Require authorization",
     });
   const accessToken = token.split(" ")[1];
   jwt.verify(accessToken, process.env.JWT_SECRET, (error, user) => {
     if (error)
       return res.status(401).json({
         err: 1,
-        mes: "Access Token may be expired or invalid",
+        message: "Access Token may be expired or invalid",
       });
     req.user = user;
   });

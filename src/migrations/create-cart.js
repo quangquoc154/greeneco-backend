@@ -7,34 +7,15 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.BIGINT
+        type: Sequelize.INTEGER
       },
-      // productId: {
-      //   type: Sequelize.STRING,
-      //   references: {
-      //     model: {
-      //       tableName: 'products',
-      //       schema: 'schema'
-      //     },
-      //     key: 'id'
-      //   },
-      // },
-      // userId: {
-      //   type: Sequelize.STRING,
-      //   references: {
-      //     model: {
-      //       tableName: 'users',
-      //       schema: 'schema'
-      //     },
-      //     key: 'id'
-      //   },
-      // },
       quantity: {
         type: Sequelize.INTEGER
       },
       totalPrice: {
         type: Sequelize.FLOAT
       },
+      userId: Sequelize.INTEGER,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
