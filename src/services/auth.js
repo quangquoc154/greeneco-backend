@@ -1,24 +1,30 @@
 const db = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid");
 
-const register = async ({ email, password }) => {
+const register = async ({ email, password, name, address, phone }) => {
   try {
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(8));
     const [user, created] = await db.User.findOrCreate({
       where: { email },
       defaults: {
+        id: uuidv4(),
+        name,
         email,
         password: hashPassword,
+        address,
+        phone,
+        roleId: 2,
       },
     });
-    console.log([user, created]);
+    const role = await user.getRole();
     const token = created
       ? jwt.sign(
           {
             id: user.id,
             email: user.email,
-            roleCode: user.roleCode,
+            roleCode: role.code,
           },
           process.env.JWT_SECRET,
           { expiresIn: "5d" }
@@ -37,15 +43,15 @@ const login = async ({ email, password }) => {
   try {
     const user = await db.User.findOne({
       where: { email },
-      raw: true,
     });
+    const role = user && await user.getRole();
     const isChecked = user && bcrypt.compareSync(password, user.password);
     const token = isChecked
       ? jwt.sign(
           {
             id: user.id,
             email: user.email,
-            roleCode: user.roleCode,
+            roleCode: role.code,
           },
           process.env.JWT_SECRET,
           { expiresIn: "5d" }

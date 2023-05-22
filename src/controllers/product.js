@@ -1,4 +1,4 @@
-const productServices = require("../services/product");
+const productService = require("../services/product");
 
 const cloudinary = require("cloudinary").v2;
 
@@ -6,7 +6,6 @@ const joi = require("joi");
 
 const {
   prodId,
-  prodIds,
   title,
   price,
   available,
@@ -38,7 +37,7 @@ const addProduct = async (req, res) => {
         message: error.details[0].message,
       });
     }
-    const response = await productServices.createNewProduct(req.body, fileData);
+    const response = await productService.createNewProduct(req.body, fileData);
     return res.status(200).json(response);
   } catch (error) {
     console.log(error);
@@ -58,19 +57,7 @@ const editProduct = async (req, res) => {
         message: error.details[0].message,
       });
     }
-    const response = await productServices.editProduct(req.body, fileData);
-    return res.status(200).json(response);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Internal Server Error",
-    });
-  }
-};
-
-const getProducts = async (req, res) => {
-  try {
-    const response = await productServices.getProducts();
+    const response = await productService.editProduct(req.body, fileData);
     return res.status(200).json(response);
   } catch (error) {
     console.log(error);
@@ -82,13 +69,25 @@ const getProducts = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
-    // const { error } = joi.object({ prodIds, filename }).validate(req.query);
+    // const { error } = joi.object({ prodId, fileName }).validate(req.query);
     // if (error) {
     //   return res.status(400).json({
     //     message: error.details[0].message,
     //   });
     // }
-    const response = await productServices.deleteProduct(req.query.prodIds, req.query.fileName);
+    const response = await productService.deleteProduct(req.query.prodId, req.query.fileName);
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+const getProducts = async (req, res) => {
+  try {
+    const response = await productService.getProducts(req.query);
     return res.status(200).json(response);
   } catch (error) {
     console.log(error);
@@ -101,6 +100,6 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   addProduct,
   editProduct,
-  getProducts,
   deleteProduct,
+  getProducts,
 };

@@ -1,6 +1,6 @@
 exports.isAdmin = (req, res, next) => {
   const { roleCode } = req.user;
-  if (roleCode !== "R1") {
+  if (roleCode !== "1") {
     return res.status(401).json({
       err: 1,
       message: "Require role admin",

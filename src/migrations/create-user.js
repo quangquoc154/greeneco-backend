@@ -5,9 +5,8 @@ module.exports = {
     await queryInterface.createTable("Users", {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       email: {
         type: Sequelize.STRING,
@@ -24,9 +23,15 @@ module.exports = {
       phone: {
         type: Sequelize.STRING(20),
       },
-      roleCode: {
-        type: Sequelize.STRING,
-        defaultValue: 'R2'
+      roleId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Roles',
+          key: 'id'
+        },
+        defaultValue: 2,
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,

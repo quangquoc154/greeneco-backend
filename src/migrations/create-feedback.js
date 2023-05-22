@@ -15,8 +15,24 @@ module.exports = {
       comment: {
         type: Sequelize.TEXT,
       },
-      productId: Sequelize.INTEGER,
-      userId: Sequelize.INTEGER,
+      productId: {
+        type: Sequelize.STRING,
+        references: {
+          model: 'Products',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      userId: {
+        type: Sequelize.STRING,
+        references: {
+          model: 'Users',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const db = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const cloudinary = require("cloudinary").v2;
@@ -39,24 +40,11 @@ exports.editProduct = async ({ id, ...body }, fileData) => {
   }
 };
 
-exports.getProducts = async () => {
-  try {
-    const products = await db.Product.findAll();
-    console.log(products)
-    return {
-      message: products.length > 0 ? "Fetch all product successfully" : "No product in database",
-      products: products.length > 0 ? products : undefined,
-    };
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-exports.deleteProduct = async (prodIds, fileName) => {
+exports.deleteProduct = async (prodId, fileName) => {
   try {
     console.log(fileName);
     const product = await db.Product.destroy({
-      where: { id: prodIds },
+      where: { id: prodId },
     });
     cloudinary.api.delete_resources(fileName, (error, result) => {
       console.log(result);
@@ -69,3 +57,44 @@ exports.deleteProduct = async (prodIds, fileName) => {
     throw new Error(error);
   }
 };
+
+exports.getProducts = async ({page, limit, order, name, available, price, ...query}) => {
+  try {
+    const queries = {raw: true, nes: true}
+    const offset = (!page || +page<=1) ? 0 : (+page - 1)
+    const fLimit = +limit || +process.env.LIMIT_PRODUCT
+    queries.offset = offset * fLimit
+    queries.limit = fLimit
+    if(order) queries.order = [order]
+    if(name) query.title = {[Op.substring]: name}
+    if(available || price) query.available = {[Op.between]: available || price}
+
+    const products = await db.Product.findAndCountAll({
+      where: query,
+      offset: queries.offset,
+      limit: queries.limit,
+      order: queries.order
+    });
+    return {
+      message: products ? "Fetch product successfully" : "No product in database",
+      productData: products
+    };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+// exports.getProducts = async () => {
+//   try {
+//     const products = await db.Product.findAll();
+//     console.log(products)
+//     return {
+//       message: products.length > 0 ? "Fetch all product successfully" : "No product in database",
+//       products: products.length > 0 ? products : undefined,
+//     };
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
+
+
