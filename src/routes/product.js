@@ -9,8 +9,11 @@ const { isAdmin } = require("../middlewares/verify_roles");
 
 const router = express.Router();
 
+// PUBLIC ROUTES
 router.get('/products', productController.getProducts);
-// router.use(verifyToken);
+
+// PROTECT ROUTES
+router.use(verifyToken);
 // router.use(isAdmin);
 router.post('/add-product', uploadCloud.single('image'), productController.addProduct);
 router.put('/edit-product', uploadCloud.single('image'), productController.editProduct);

@@ -9,15 +9,24 @@ const verifyToken = (req, res, next) => {
     });
   const accessToken = token.split(" ")[1];
   jwt.verify(accessToken, process.env.JWT_SECRET, (error, user) => {
-    if (error)
-      return res.status(401).json({
-        err: 1,
-        message: "Access Token may be expired or invalid",
-      });
-      console.log(user);
+    if(error) {
+      const isChecked = error instanceof jwt.TokenExpiredError
+      if (!isChecked) {
+        return res.status(401).json({
+          err: 1,
+          message: "Access Token invalid",
+        });
+      } 
+      if (isChecked) {
+        return res.status(401).json({
+          err: 2,
+          message: "Access Token has expired",
+        });
+      }
+    }
     req.user = user;
+    next();
   });
-  next();
 };
 
 module.exports = verifyToken;

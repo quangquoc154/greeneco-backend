@@ -6,7 +6,7 @@ const { isAdmin } = require("../middlewares/verify_roles");
 const router = express.Router();
 
 // PROTECTED ROUTES
-// router.use(verifyToken);
+router.use(verifyToken);
 router.get("/", userControllers.getCurrentUser);
 
 module.exports = router;

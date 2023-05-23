@@ -21,6 +21,7 @@ const dateOfManufacture = joi.number().required();
 const madeIn = joi.string().required();
 const certificate = joi.string().required();
 const fileName = joi.string().required();
+const refreshToken = joi.string().required();
 
 module.exports = {
   prodId,
@@ -38,4 +39,5 @@ module.exports = {
   madeIn,
   certificate,
   fileName,
+  refreshToken,
 };

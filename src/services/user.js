@@ -5,7 +5,7 @@ exports.getUser = async (userId) => {
     const user = await db.User.findOne({
       where: { id: userId },
       attributes: {
-        exclude: ["password", "roleId"],
+        exclude: ["password", "roleId", "refreshToken"],
       },
       include: [
         { model: db.Role, attributes: ["id", "code", "value"] },

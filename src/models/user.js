@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       address: DataTypes.STRING,
       phone: DataTypes.STRING,
       roleId: DataTypes.INTEGER,
+      refreshToken: DataTypes.STRING,
     },
     {
       sequelize,
