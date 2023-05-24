@@ -9,4 +9,10 @@ const router = express.Router();
 router.use(verifyToken);
 router.get("/", userControllers.getCurrentUser);
 
+router.use(isAdmin);
+router.get("/users", userControllers.getUsers);
+router.delete("/delete-user", userControllers.deleteUser);
+router.put("/edit-user", userControllers.editUser);
+router.delete("/delete-user", userControllers.deleteUser);
+
 module.exports = router;

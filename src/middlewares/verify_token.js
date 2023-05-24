@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const db = require("../models");
 
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
@@ -8,7 +9,7 @@ const verifyToken = (req, res, next) => {
       message: "Require authorization",
     });
   const accessToken = token.split(" ")[1];
-  jwt.verify(accessToken, process.env.JWT_SECRET, (error, user) => {
+  jwt.verify(accessToken, process.env.JWT_SECRET, async (error, decode) => {
     if(error) {
       const isChecked = error instanceof jwt.TokenExpiredError
       if (!isChecked) {
@@ -17,6 +18,7 @@ const verifyToken = (req, res, next) => {
           message: "Access Token invalid",
         });
       } 
+      // Check the expiration date of the access token
       if (isChecked) {
         return res.status(401).json({
           err: 2,
@@ -24,6 +26,15 @@ const verifyToken = (req, res, next) => {
         });
       }
     }
+    const user = await db.User.findOne({
+      where: {id: decode.id},
+      attributes: {
+        exclude: ["password", "roleId", "refreshToken", "createdAt", "updatedAt"]
+      },
+      include: [
+        { model: db.Role, attributes: ["id", "code", "value"] },
+      ],
+    })
     req.user = user;
     next();
   });

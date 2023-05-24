@@ -74,21 +74,19 @@ const login = async ({ email, password }) => {
 
 const refreshToken = async ( refreshToken ) => {
   try {
-    let response;
     const user = await db.User.findOne({
       where: { refreshToken: refreshToken }
     })
     const role = user && (await user.getRole());
     if (user) {
-      jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH_TOKEN, (error, user) => {
-        console.log(user);
+      jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH_TOKEN, (error) => {
         if(error) {
-          response = res.status(401).json({
+          return res.status(401).json({
             message: "Refresh token has expired. Require login again",
           });
         } else {
           const accessToken = jwt.sign({ id: user.id, email: user.email, roleCode: role.code }, process.env.JWT_SECRET, { expiresIn: "5d" })
-          response = {
+          return {
             message: accessToken ? "Generate access token successfully" : "Fail to generate new access token. Let's try more time",
             'accessToken': accessToken ? `Bearer ${accessToken}` : null,
             'refreshToken': refreshToken
@@ -96,7 +94,6 @@ const refreshToken = async ( refreshToken ) => {
         }
       })
     }
-    return response;
   } catch (error) {
     throw new Error(error);
   }

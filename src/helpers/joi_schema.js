@@ -5,7 +5,7 @@ const email = joi
   .email({ minDomainSegments: 2, tlds: { allow: ["com"] } })
   .required();
 // const email = joi.string().pattern(new RegExp('gmail.com')).required()
-
+const userId = joi.string().required();
 const password = joi.string().min(6).required();
 const name = joi.string().required();
 const address = joi.string().required();
@@ -24,12 +24,13 @@ const fileName = joi.string().required();
 const refreshToken = joi.string().required();
 
 module.exports = {
-  prodId,
+  userId,
   email,
   password,
   name,
   address,
   phone,
+  prodId,
   title,
   price,
   available,

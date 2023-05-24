@@ -14,7 +14,7 @@ router.get('/products', productController.getProducts);
 
 // PROTECT ROUTES
 router.use(verifyToken);
-// router.use(isAdmin);
+router.use(isAdmin);
 router.post('/add-product', uploadCloud.single('image'), productController.addProduct);
 router.put('/edit-product', uploadCloud.single('image'), productController.editProduct);
 router.delete('/delete-product', productController.deleteProduct);
