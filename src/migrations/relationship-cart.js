@@ -30,7 +30,9 @@ module.exports = {
       },
       quantity: {
         type: Sequelize.INTEGER,
-        allowNull: false
+      },
+      totalPrice: {
+        type: Sequelize.FLOAT,
       },
       createdAt: {
         allowNull: false,

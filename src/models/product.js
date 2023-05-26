@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       madeIn: DataTypes.STRING,
       certificate: DataTypes.STRING,
       fileName: DataTypes.STRING,
+      category: DataTypes.STRING,
     },
     {
       sequelize,

@@ -35,7 +35,7 @@ const editUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const { error } = joi.object({ userId }).validate({userId: req.query.id});
+    const { error } = joi.object({ userId }).validate({ userId: req.query.id });
     if (error) {
       return res.status(400).json({
         message: error.details[0].message,

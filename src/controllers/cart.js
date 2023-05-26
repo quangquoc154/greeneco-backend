@@ -1,4 +1,3 @@
-const db = require("../models");
 const joi = require("joi")
 const { prodId } = require("../helpers/joi_schema")
 const cartService = require("../services/cart")

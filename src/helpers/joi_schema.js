@@ -7,7 +7,7 @@ const email = joi
 // const email = joi.string().pattern(new RegExp('gmail.com')).required()
 const userId = joi.string().required();
 const password = joi.string().min(6).required();
-const name = joi.string().required();
+const fullname = joi.string().required();
 const address = joi.string().required();
 const phone = joi.number().min(10).required();
 
@@ -27,7 +27,7 @@ module.exports = {
   userId,
   email,
   password,
-  name,
+  fullname,
   address,
   phone,
   prodId,

@@ -12,13 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsTo(models.Role, { foreignKey: "roleId" });
       User.hasOne(models.Cart, { foreignKey: "userId" });
       User.hasMany(models.Order, { foreignKey: "userId" });
+      User.hasMany(models.Feedback, { foreignKey: "userId" });
     }
   }
   User.init(
     {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      name: DataTypes.STRING,
+      fullname: DataTypes.STRING,
       address: DataTypes.STRING,
       phone: DataTypes.STRING,
       roleId: DataTypes.INTEGER,

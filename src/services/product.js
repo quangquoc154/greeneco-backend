@@ -58,7 +58,7 @@ exports.deleteProduct = async (prodId, fileName) => {
   }
 };
 
-exports.getProducts = async ({page, limit, order, name, available, price, ...query}) => {
+exports.getProducts = async ({page, limit, order, name, category, price, priceGte, priceLte, ...query}) => {
   try {
     const queries = {raw: true, nes: true}
     const offset = (!page || +page<=1) ? 0 : (+page - 1)
@@ -67,8 +67,10 @@ exports.getProducts = async ({page, limit, order, name, available, price, ...que
     queries.limit = fLimit
     if(order) queries.order = [order]
     if(name) query.title = {[Op.substring]: name}
-    if(available || price) query.available = {[Op.between]: available || price}
-
+    if(category) query.title = {[Op.substring]: category}
+    if(price) query.price = {[Op.eq]: price}
+    if(priceGte && priceLte) query.price = {[Op.between]: [priceGte, priceLte]}
+    
     const products = await db.Product.findAndCountAll({
       where: query,
       offset: queries.offset,

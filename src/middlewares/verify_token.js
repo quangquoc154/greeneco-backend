@@ -27,14 +27,11 @@ const verifyToken = (req, res, next) => {
       }
     }
     const user = await db.User.findOne({
-      where: {id: decode.id},
+      where: { id: decode.id },
       attributes: {
-        exclude: ["password", "roleId", "refreshToken", "createdAt", "updatedAt"]
+        exclude: ["password", "refreshToken", "createdAt", "updatedAt"],
       },
-      include: [
-        { model: db.Role, attributes: ["id", "code", "value"] },
-      ],
-    })
+    });
     req.user = user;
     next();
   });

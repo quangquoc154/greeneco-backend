@@ -49,7 +49,7 @@ exports.deleteUser = async (id) => {
   }
 };
 
-exports.getUsers = async ({ page, limit, order, name, ...query }) => {
+exports.getUsers = async ({ page, limit, order, fullName, ...query }) => {
   try {
     const queries = {raw: true, nes: true}
     const offset = (!page || +page<=1) ? 0 : (+page - 1)
@@ -57,7 +57,7 @@ exports.getUsers = async ({ page, limit, order, name, ...query }) => {
     queries.offset = offset * fLimit
     queries.limit = fLimit
     if(order) queries.order = [order]
-    if(name) query.name = {[Op.substring]: name}
+    if(fullName) query.fullName = {[Op.substring]: fullName}
 
     const users = await db.User.findAndCountAll({
       where: query,

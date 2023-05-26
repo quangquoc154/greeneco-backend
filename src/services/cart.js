@@ -3,6 +3,7 @@ const db = require("../models");
 const addToCart = async (user, prodId) => {
   try {
     let newQuantity = 1;
+    let totalAmount = 0;
     const cart = await user.getCart();
     const [productCart] = await cart.getProducts({
       where: { id: prodId },
@@ -15,7 +16,18 @@ const addToCart = async (user, prodId) => {
     const product = await db.Product.findOne({
       where: { id: prodId },
     });
-    await cart.addProduct(product, { through: { quantity: newQuantity } });
+    const totalPrice = product.price * newQuantity
+    
+    await cart.addProduct(product, { through: { quantity: newQuantity, totalPrice } });
+
+    // Calculate total amount of cart
+    const products = await cart.getProducts();
+    products.map(product => {
+      totalAmount += product.price * product.CartItem.quantity
+    })
+    await cart.update({
+      totalAmount: totalAmount
+    })
 
     return {
       message: "Add to cart successfully",

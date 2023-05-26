@@ -16,6 +16,7 @@ module.exports = {
       dateOfManufacture: Sequelize.INTEGER,
       madeIn: Sequelize.STRING(50),
       certificate: Sequelize.STRING(50),
+      category: DataTypes.STRING(20),
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -24,6 +24,18 @@ module.exports = {
       paymentMethod: {
         type: Sequelize.STRING(20)
       },
+      name: {
+        type: Sequelize.STRING(50)
+      },
+      address: {
+        type: Sequelize.STRING
+      },
+      phone: {
+        type: Sequelize.INTEGER
+      },
+      notes: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

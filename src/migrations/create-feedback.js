@@ -10,12 +10,12 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       rating: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       comment: {
         type: Sequelize.TEXT,
       },
-      productId: {
+      prodId: {
         type: Sequelize.STRING,
         references: {
           model: 'Products',

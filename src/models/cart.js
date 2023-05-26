@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, FLOAT } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Cart extends Model {
     /**
@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Cart.init(
     {
       userId: DataTypes.STRING,
+      totalAmount: FLOAT
     },
     {
       sequelize,
