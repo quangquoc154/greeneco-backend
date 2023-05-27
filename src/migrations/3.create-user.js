@@ -33,6 +33,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
+      refreshToken: Sequelize.STRING,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
