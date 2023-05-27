@@ -13,6 +13,7 @@
     "username": "root",
     "password": null,
     "database": "railway",
+    "port": "7535",
     "host": "containers-us-west-36.railway.app",
     "dialect": "mysql"
   },
@@ -20,6 +21,7 @@
     "username": "root",
     "password": null,
     "database": "railway",
+    "port": "7535",
     "host": "containers-us-west-36.railway.app",
     "dialect": "mysql"
   }
