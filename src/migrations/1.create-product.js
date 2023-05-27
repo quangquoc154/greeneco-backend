@@ -17,6 +17,7 @@ module.exports = {
       madeIn: Sequelize.STRING(50),
       certificate: Sequelize.STRING(50),
       category: Sequelize.STRING(20),
+      fileName: Sequelize.STRING(50),
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
       dateOfManufacture: DataTypes.INTEGER,
       madeIn: DataTypes.STRING,
       certificate: DataTypes.STRING,
-      fileName: DataTypes.STRING,
       category: DataTypes.STRING,
+      fileName: DataTypes.STRING,
     },
     {
       sequelize,
