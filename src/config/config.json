@@ -1,9 +1,10 @@
 {
   "development": {
     "username": "root",
-    "password": "Tin@1542002",
-    "database": "greeneco_db",
-    "host": "127.0.0.1",
+    "password": "2FsvJa2miGslXcbXoPKm",
+    "database": "railway",
+    "host": "containers-us-west-36.railway.app",
+    "port": "7535",
     "dialect": "mysql",
     "logging": false,
     "timezone": "+07:00"
