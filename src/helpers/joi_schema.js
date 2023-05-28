@@ -20,6 +20,7 @@ const description = joi.string().required();
 const dateOfManufacture = joi.number().required();
 const madeIn = joi.string().required();
 const certificate = joi.string().required();
+const category = joi.string().required();
 const fileName = joi.string().required();
 const refreshToken = joi.string().required();
 
@@ -39,6 +40,7 @@ module.exports = {
   dateOfManufacture,
   madeIn,
   certificate,
+  category,
   fileName,
   refreshToken,
 };

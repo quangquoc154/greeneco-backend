@@ -14,6 +14,7 @@ const {
   dateOfManufacture,
   madeIn,
   certificate,
+  category,
 } = require("../helpers/joi_schema");
 
 const addProduct = async (req, res) => {
@@ -29,6 +30,7 @@ const addProduct = async (req, res) => {
         dateOfManufacture,
         madeIn,
         certificate,
+        category,
       })
       .validate({ ...req.body, imageUrl: fileData?.path });
     if (error) {
