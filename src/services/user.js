@@ -60,7 +60,7 @@ exports.getUsers = async ({ page, limit, order, fullName, ...query }) => {
     if(order) queries.order = [order]
     if(fullName) query.fullName = {[Op.substring]: fullName}
 
-    const users = await db.User.findAndCountAll({
+    const users = await db.User.findAll({
       where: query,
       offset: queries.offset,
       limit: queries.limit,

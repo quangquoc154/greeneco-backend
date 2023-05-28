@@ -72,7 +72,7 @@ exports.getProducts = async ({page, limit, order, name, category, price, priceGt
     if(price) query.price = {[Op.eq]: price}
     if(priceGte && priceLte) query.price = {[Op.between]: [priceGte, priceLte]}
     
-    const products = await db.Product.findAndCountAll({
+    const products = await db.Product.findAll({
       where: query,
       offset: queries.offset,
       limit: queries.limit,
