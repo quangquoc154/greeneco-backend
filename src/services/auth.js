@@ -52,7 +52,7 @@ const login = async ({ email, password }, res) => {
     
     return {
       message: accessToken ? "Login is successfully" : user ? "Password was incorrect" : "Email hasn't been registered",
-      'accessToken': accessToken ? `Bearer ${accessToken}` : null,
+      'accessToken': accessToken ? accessToken : null,
     };
   } catch (error) {
     throw new Error(error);
@@ -74,10 +74,9 @@ const refreshToken = async ( refreshToken ) => {
           });
         } else {
           const accessToken = jwt.sign({ id: user.id, email: user.email, roleCode: role.code }, process.env.JWT_SECRET, { expiresIn: "5d" })
-          console.log(accessToken)
           response = {
             message: accessToken ? "Generate access token successfully" : "Fail to generate new access token. Let's try more time",
-            'newAccessToken': accessToken ? `Bearer ${accessToken}` : null,
+            'newAccessToken': accessToken ? accessToken : null,
           }
         }
       })
