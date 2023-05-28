@@ -53,9 +53,10 @@ exports.getUsers = async ({ page, limit, order, fullName, ...query }) => {
   try {
     const queries = {raw: true, nes: true}
     const offset = (!page || +page<=1) ? 0 : (+page - 1)
-    const fLimit = +limit || +process.env.LIMIT_PRODUCT
-    queries.offset = offset * fLimit
-    queries.limit = fLimit
+    if (limit) {
+      queries.offset = offset * +limit
+      queries.limit = +limit
+    }
     if(order) queries.order = [order]
     if(fullName) query.fullName = {[Op.substring]: fullName}
 
