@@ -26,7 +26,10 @@ exports.createNewProduct = async (body, fileData) => {
 
 exports.editProduct = async ({ id, ...body }, fileData) => {
   try {
-    if (fileData) body.imageUrl = fileData?.path;
+    if (fileData) {
+      body.imageUrl = fileData?.path;
+      body.fileName = fileData?.filename
+    }
     const product = await db.Product.update(body, { where: { id: id } });
     if (fileData && product[0] === 0)
       cloudinary.uploader.destroy(fileData.filename);
@@ -76,7 +79,10 @@ exports.getProducts = async ({page, limit, order, name, category, price, priceGt
       where: query,
       offset: queries.offset,
       limit: queries.limit,
-      order: queries.order
+      order: queries.order,
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      }
     });
     return {
       message: products ? "Fetch product successfully" : "No product in database",

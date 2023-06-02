@@ -33,7 +33,7 @@ module.exports = {
       phone: {
         type: Sequelize.INTEGER
       },
-      notes: {
+      status: {
         type: Sequelize.STRING
       },
       createdAt: {

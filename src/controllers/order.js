@@ -13,6 +13,18 @@ const createOrder = async (req, res) => {
   }
 };
 
+const createOrderFormCart = async (req, res) => {
+  try {
+    const response = await orderService.createOrderFormCart(req.user, req.body)
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 const getOrder = async (req, res) => {
   try {
     const response = await orderService.getOrder(req.user);
@@ -25,7 +37,21 @@ const getOrder = async (req, res) => {
   }
 };
 
+const cancelOrder = async (req, res) => {
+  try {
+    const response = await orderService.cancelOrder(req.user, req.params.orderId);
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
-    createOrder, 
-    getOrder
+    createOrder,
+    createOrderFormCart, 
+    getOrder,
+    cancelOrder,
 };

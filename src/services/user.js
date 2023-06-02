@@ -66,7 +66,7 @@ exports.getUsers = async ({ page, limit, order, fullName, ...query }) => {
       limit: queries.limit,
       order: queries.order,
       attributes: {
-        exclude: ["password", "roleId", "refreshToken"],
+        exclude: ["password", "roleId", "refreshToken", "createdAt", "updatedAt"],
       },
       include: [
         { model: db.Role, attributes: ["id", "code", "value"] },

@@ -1,36 +1,33 @@
 const db = require("../models");
 
-const addToCart = async (user, prodId) => {
+const addToCart = async (user, { prodId, quantity }) => {
   try {
-    let newQuantity = 1;
-    let totalAmount = 0;
+    let newQuantity = +quantity;
     const cart = await user.getCart();
     const [productCart] = await cart.getProducts({
       where: { id: prodId },
     });
     if (productCart) {
-      newQuantity = productCart.CartItem.quantity + 1;
+      newQuantity += productCart.CartItem.quantity;
     }
 
     // Add product into cart (No product in cart / Exist product in cart)
-    const product = await db.Product.findOne({
-      where: { id: prodId },
-    });
-    const totalPrice = product.price * newQuantity
-    
+    const product = await db.Product.findByPk(prodId);
+    const totalPrice = product.price * newQuantity;
     await cart.addProduct(product, { through: { quantity: newQuantity, totalPrice } });
 
     // Calculate total amount of cart
     const products = await cart.getProducts();
-    products.map(product => {
-      totalAmount += product.price * product.CartItem.quantity
-    })
+    const totalAmount = products.reduce((sum, product) => sum + (product.price * product.CartItem.quantity), 0);
+    // products.map(product => {
+    //   totalAmount += product.price * product.CartItem.quantity
+    // })
     await cart.update({
       totalAmount: totalAmount
     })
 
     return {
-      message: "Add to cart successfully",
+      message: product ? "Add to cart successfully" : "Has error when add product to cart",
     }
   } catch (error) {
     throw new Error(error)
@@ -39,10 +36,19 @@ const addToCart = async (user, prodId) => {
 
 const getCart = async(user) => {
   try {
-    const cart = await user.getCart();
-    const products = await cart.getProducts();
+    const cart = await user.getCart({
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      }
+    });
+    const products = await cart.getProducts({
+      attributes: {
+        exclude: ["available", "dateOfManufacture", "madeIn", "certificate", "fileName", "createdAt", "updatedAt"],
+      }
+    });
     return {
-      message: products > 0 ? "Get item in cart successfully" : "No product in cart",
+      message: cart.length > 0 ? "Get item in cart successfully" : "No product in cart",
+      cartData: cart,
       productsData: products
     };
   } catch (error) {

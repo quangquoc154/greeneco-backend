@@ -23,6 +23,7 @@ const certificate = joi.string().required();
 const category = joi.string().required();
 const fileName = joi.string().required();
 const refreshToken = joi.string().required();
+const quantity = joi.number().required();
 
 module.exports = {
   userId,
@@ -43,4 +44,5 @@ module.exports = {
   category,
   fileName,
   refreshToken,
+  quantity,
 };
