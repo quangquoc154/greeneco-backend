@@ -5,8 +5,8 @@ const { userId } = require('../helpers/joi_schema')
 const getCurrentUser = async (req, res) => {
   try {
     const { id } = req.user;
-    const response = await userServices.getUser(id);
-    return res.status(200).json(response);
+    const response = await userServices.getUser(id, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -23,8 +23,8 @@ const editUser = async (req, res) => {
         message: error.details[0].message,
       });
     }
-    const response = await userServices.editUser(req.body);
-    return res.status(200).json(response);
+    const response = await userServices.editUser(req.body, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -41,8 +41,8 @@ const deleteUser = async (req, res) => {
         message: error.details[0].message,
       });
     }
-    const response = await userServices.deleteUser(req.query.id);
-    return res.status(200).json(response);
+    const response = await userServices.deleteUser(req.query.id, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -53,8 +53,8 @@ const deleteUser = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const response = await userServices.getUsers(req.query);
-    return res.status(200).json(response);
+    const response = await userServices.getUsers(req.query, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({

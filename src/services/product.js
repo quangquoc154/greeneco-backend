@@ -3,7 +3,7 @@ const db = require("../models");
 const { v4: uuidv4 } = require("uuid");
 const cloudinary = require("cloudinary").v2;
 
-exports.createNewProduct = async (body, fileData) => {
+exports.createNewProduct = async (body, fileData, res) => {
   try {
     const [product, created] = await db.Product.findOrCreate({
       where: { title: body.title },
@@ -15,16 +15,18 @@ exports.createNewProduct = async (body, fileData) => {
       },
     });
     if (fileData && !created) cloudinary.uploader.destroy(fileData.filename);
-    return {
+    
+    const status = created ? 201 : 409;
+    return res.status(status).json({
       message: created ? "Create successfully" : "Title product already exist",
-    };
+    });
   } catch (error) {
     if (fileData) cloudinary.uploader.destroy(fileData.filename);
     throw new Error(error);
   }
 };
 
-exports.editProduct = async ({ id, ...body }, fileData) => {
+exports.editProduct = async ({ id, ...body }, fileData, res) => {
   try {
     if (fileData) {
       body.imageUrl = fileData?.path;
@@ -33,9 +35,11 @@ exports.editProduct = async ({ id, ...body }, fileData) => {
     const product = await db.Product.update(body, { where: { id: id } });
     if (fileData && product[0] === 0)
       cloudinary.uploader.destroy(fileData.filename);
-    return {
+
+    const status = product[0] > 0 ? 200 : 404;
+    return res.status(status).json({
       message: product[0] > 0 ? "Update successfully" : "Product id not found",
-    };
+    });
   } catch (error) {
     if (fileData && product[0] === 0)
       cloudinary.uploader.destroy(fileData.filename);
@@ -43,7 +47,7 @@ exports.editProduct = async ({ id, ...body }, fileData) => {
   }
 };
 
-exports.deleteProduct = async (prodId, fileName) => {
+exports.deleteProduct = async (prodId, fileName, res) => {
   try {
     console.log(fileName);
     const product = await db.Product.destroy({
@@ -52,16 +56,17 @@ exports.deleteProduct = async (prodId, fileName) => {
     cloudinary.api.delete_resources(fileName, (error, result) => {
       console.log(result);
     });
-    return {
-      message:
-        product > 0 ? `${product} product are deleted` : "Product id not found",
-    };
+
+    const status = product > 0 ? 200 : 404;
+    return res.status(status).json({
+      message: product > 0 ? `${product} product are deleted` : "Product id not found",
+    });
   } catch (error) {
     throw new Error(error);
   }
 };
 
-exports.getProducts = async ({page, limit, order, name, category, price, priceGte, priceLte, ...query}) => {
+exports.getProducts = async ({page, limit, order, name, category, price, priceGte, priceLte, ...query}, res) => {
   try {
     const queries = {raw: true, nes: true}
     const offset = (!page || +page<=1) ? 0 : (+page - 1)
@@ -84,10 +89,11 @@ exports.getProducts = async ({page, limit, order, name, category, price, priceGt
         exclude: ["createdAt", "updatedAt"],
       }
     });
-    return {
+    const status = products ? 200 : 404;
+    return res.status(status).json({
       message: products ? "Fetch product successfully" : "No product in database",
       productData: products
-    };
+    });
   } catch (error) {
     throw new Error(error);
   }

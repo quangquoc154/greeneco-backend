@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       phone: DataTypes.STRING,
       roleId: DataTypes.INTEGER,
       refreshToken: DataTypes.STRING,
+      otpReset: DataTypes.STRING,
     },
     {
       sequelize,

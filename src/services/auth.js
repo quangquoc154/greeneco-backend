@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 
-const register = async ({ email, password, fullname, address, phone }) => {
+const register = async ({ email, password, fullname, address, phone }, res) => {
   try {
     const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(8));
     const [user, created] = await db.User.findOrCreate({
@@ -18,10 +18,10 @@ const register = async ({ email, password, fullname, address, phone }) => {
         roleId: 2,
       },
     });
-    
-    return {
+    const status = created ? 201 : 409;
+    return res.status(status).json({
       message: created ? "Register is successfully" : "Email is used",
-    };
+    });
   } catch (error) {
     throw new Error(error);
   }
@@ -47,21 +47,21 @@ const login = async ({ email, password }, res) => {
         where: { id: user.id },
       })
     }
-
     res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
     
-    return {
+    const status = accessToken ? 200 : user ? 401 : 404;
+    return res.status(status).json({
       message: accessToken ? "Login is successfully" : user ? "Password was incorrect" : "Email hasn't been registered",
-      'accessToken': accessToken ? accessToken : null,
-    };
+      accessToken: accessToken ? accessToken : null
+    });
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const refreshToken = async ( refreshToken ) => {
+const refreshToken = async ( refreshToken, res ) => {
   try {
-    let response;
+    let response, status;
     const user = await db.User.findOne({
       where: { refreshToken: refreshToken }
     })
@@ -69,11 +69,12 @@ const refreshToken = async ( refreshToken ) => {
     if (user) {
       jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH_TOKEN, (error) => {
         if(error) {
-          response = res.status(401).json({
+          return res.status(401).json({
             message: "Refresh token has expired. Require login again",
           });
         } else {
           const accessToken = jwt.sign({ id: user.id, email: user.email, roleCode: role.code }, process.env.JWT_SECRET, { expiresIn: "5d" })
+          status = accessToken ? 200 : 500;
           response = {
             message: accessToken ? "Generate access token successfully" : "Fail to generate new access token. Let's try more time",
             'newAccessToken': accessToken ? accessToken : null,
@@ -81,7 +82,7 @@ const refreshToken = async ( refreshToken ) => {
         }
       })
     }
-    return response;
+    return res.status(status).json(response);
   } catch (error) {
     throw new Error(error);
   }
@@ -96,29 +97,14 @@ const logout = async ( refreshToken, res ) => {
   })
   // Delete refresh token in cookie browser
   res.clearCookie('refreshToken', {
-      httpOnly: true,
-      secure: true
+    httpOnly: true,
+    secure: true
   })
   return {
-      success: true,
-      mes: 'Logout is done'
+    success: true,
+    mes: 'Logout is done'
   }
 }
-
-// const resetPassword = async (req, res) => {
-//   try {
-//     const { error } = joi.object({ refreshToken }).validate(req.body);
-//     if (error)
-//       return res.status(400).json({
-//         message: error.details[0].message,
-//       });
-//     const response = await authServices.logout(req.body.refreshToken);
-//     return res.status(200).json(response);
-//   } catch (error) {
-//     console.log(error);
-//     throw new Error(error);
-//   }
-// };
 
 module.exports = {
   login,

@@ -1,22 +1,23 @@
 const { Op } = require("sequelize");
 const db = require("../models");
 
-const createFeedback = async (user, { rating, comment, prodId }) => {
+const createFeedback = async (user, { rating, comment, prodId }, res) => {
   try {
     const feedback = await user.createFeedback({
         rating: rating,
         comment: comment,
         prodId: prodId
     })
-    return {
-        message: feedback ? "Create feedback successfully" : "Has error when create feedback",
-    }
+    const status = feedback ? 201 : 409;
+    return res.status(status).json({
+      message: feedback ? "Create feedback successfully" : "Has error when create feedback",
+    });
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const editFeedback = async (user, { rating, comment, prodId }) => {
+const editFeedback = async (user, { rating, comment, prodId }, res) => {
   try {
     const feedback = await db.Feedback.findOne({
       where: { prodId: prodId, userId: user.id }
@@ -26,15 +27,16 @@ const editFeedback = async (user, { rating, comment, prodId }) => {
       feedback.comment = comment;
     }
     await feedback.save();
-    return {
-        message: feedback ? "Update feedback successfully" : "Has error when update feedback",
-    }
+    const status = feedback ? 200 : 404;
+    return res.status(status).json({
+      message: feedback ? "Update feedback successfully" : "Has error when update feedback",
+    });
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const deleteFeedback = async (user, { prodId }) => {
+const deleteFeedback = async (user, { prodId }, res) => {
   try {
     const feedback = await db.Feedback.findOne({
       where: { prodId: prodId, userId: user.id }
@@ -42,15 +44,16 @@ const deleteFeedback = async (user, { prodId }) => {
     if(feedback) {
       await feedback.destroy();
     }
-    return {
-        message: feedback ? "Delete feedback successfully" : "Has error when delete feedback",
-    }
+    const status = feedback ? 200 : 404;
+    return res.status(status).json({
+      message: feedback ? "Delete feedback successfully" : "Has error when delete feedback",
+    });
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const getFeedbacks = async ({ page, limit, order, rating, ratingGte, ratingLte, ...query }) => {
+const getFeedbacks = async ({ page, limit, order, rating, ratingGte, ratingLte, ...query }, res) => {
   try {
     const queries = {raw: true, nes: true}
     const offset = (!page || +page<=1) ? 0 : (+page - 1)
@@ -62,7 +65,7 @@ const getFeedbacks = async ({ page, limit, order, rating, ratingGte, ratingLte, 
     if(ratingGte && ratingLte ) query.rating = {[Op.between]: [ratingGte, ratingLte]}
 
 
-    const feedback = await db.Feedback.findAndCountAll({
+    const feedback = await db.Feedback.findAll({
       where: query,
       offset: queries.offset,
       limit: queries.limit,
@@ -78,10 +81,11 @@ const getFeedbacks = async ({ page, limit, order, rating, ratingGte, ratingLte, 
         { model: db.Product, attributes: ["title", "price", "imageUrl", "dateOfManufacture"] },
       ],
     });
-    return {
+    const status = feedback ? 200 : 404;
+    return res.status(status).json({
       message: feedback ? "Fetch feedback successfully" : "No feedback in database",
       feedbackData: feedback
-    };
+    });
   } catch (error) {
     throw new Error(error);
   }

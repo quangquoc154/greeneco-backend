@@ -1,7 +1,7 @@
 const { Op } = require("sequelize");
 const db = require("../models");
 
-exports.getUser = async (userId) => {
+exports.getUser = async (userId, res) => {
   try {
     const user = await db.User.findOne({
       where: { id: userId },
@@ -12,44 +12,46 @@ exports.getUser = async (userId) => {
         { model: db.Role, attributes: ["id", "code", "value"] },
       ],
     });
-    return {
+    const status = user ? 200 : 404;
+    return res.status(status).json({
       message: user ? "Get successfully" : "User not found",
-      userData: user,
-    };
+      userData: user
+    })
   } catch (error) {
     throw new Error(error);
   }
 };
 
-exports.editUser = async ({ id, ...body }) => {
+exports.editUser = async ({ id, ...body }, res) => {
   try {
     const user = await db.User.update(body, {
       where: { id: id },
     });
-    return {
+    const status = user ? 200 : 404;
+    return res.status(status).json({
       message: user ? "Update successfully" : "User id not found",
-    };
+    })
   } catch (error) {
     throw new Error(error);
   }
 };
 
-exports.deleteUser = async (id) => {
+exports.deleteUser = async (id, res) => {
   try {
     const user = await db.User.destroy({
       where: { id: id },
     });
     console.log(user);
-    return {
-      message:
-        user > 0 ? "Delete successfully" : "User id not found",
-    };
+    const status = user ? 200 : 404;
+    return res.status(status).json({
+      message: user ? "Delete successfully" : "User id not found",
+    })
   } catch (error) {
     throw new Error(error);
   }
 };
 
-exports.getUsers = async ({ page, limit, order, fullName, ...query }) => {
+exports.getUsers = async ({ page, limit, order, fullName, ...query }, res) => {
   try {
     const queries = {raw: true, nes: true}
     const offset = (!page || +page<=1) ? 0 : (+page - 1)
@@ -72,10 +74,11 @@ exports.getUsers = async ({ page, limit, order, fullName, ...query }) => {
         { model: db.Role, attributes: ["id", "code", "value"] },
       ],
     });
-    return {
+    const status = users ? 200 : 404;
+    return res.status(status).json({
       message: users ? "Fetch user successfully" : "No user in database",
       userData: users
-    };
+    })
   } catch (error) {
     throw new Error(error);
   }

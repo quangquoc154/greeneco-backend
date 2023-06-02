@@ -10,8 +10,8 @@ const addToCart = async (req, res) => {
         message: error.details[0].message,
       });
     }
-    const response = await cartService.addToCart(req.user, req.body)
-    res.status(200).json(response);
+    const response = await cartService.addToCart(req.user, req.body, res)
+    return response;
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -22,8 +22,8 @@ const addToCart = async (req, res) => {
 
 const getCart = async (req, res) => {
   try {
-    const response = await cartService.getCart(req.user);
-    res.status(200).json(response);
+    const response = await cartService.getCart(req.user, res);
+    return response;
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -34,14 +34,14 @@ const getCart = async (req, res) => {
 
 const deleteCartItem = async(req, res) => {
   try {
-    const { error } = joi.object({ prodId }).validate(req.body);
+    const { error } = joi.object({ prodId }).validate(req.body, res);
     if(error) {
       return res.status(400).json({
         message: error.details[0].message,
       });
     }
-    const response = await cartService.deleteCartItem(req.user, req.body.prodId);
-    res.status(200).json(response);
+    const response = await cartService.deleteCartItem(req.user, req.body.prodId, res);
+    return response;
   } catch (error) {
     console.log(error);
     res.status(500).json({

@@ -1,6 +1,6 @@
 const db = require("../models");
 
-const createOrder = async (user, { paymentMethod, name, address, phone, prodId, quantity }) => {
+const createOrder = async (user, { paymentMethod, name, address, phone, prodId, quantity }, res) => {
   try {
     let totalAmount = 0;
     const product = await db.Product.findByPk(prodId);
@@ -19,6 +19,7 @@ const createOrder = async (user, { paymentMethod, name, address, phone, prodId, 
       name: name,
       address: address,
       phone: phone,
+      status: "Ordered"
     });
 
     // Add product form cart into order
@@ -28,22 +29,22 @@ const createOrder = async (user, { paymentMethod, name, address, phone, prodId, 
         totalPrice: totalPrice
       }
     });
-
-    return {
-      message: order ? "Create order successfully" : "",
-    };
+    const status = order ? 201 : 409;
+    return res.status(status).json({
+      message: order ? "Create order successfully" : "Has error when create order",
+    });
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const createOrderFormCart = async (user, { paymentMethod, name, address, phone }) => {
+const createOrderFormCart = async (user, { paymentMethod, name, address, phone }, res) => {
   try {
     const cart = await user.getCart();
     const products = await cart.getProducts();
 
     if (!name && !address && !phone) {
-      name = user.fullName,
+      name = user.fullname,
       address = user.address,
       phone = user.phone
     }
@@ -54,6 +55,7 @@ const createOrderFormCart = async (user, { paymentMethod, name, address, phone }
       name: name,
       address: address,
       phone: phone,
+      status: "Ordered"
     });
 
     // Add product form cart into order
@@ -68,53 +70,69 @@ const createOrderFormCart = async (user, { paymentMethod, name, address, phone }
     // Delete the current cart after the order has been created
     await cart.setProducts(null);
 
-    return {
-      message: order ? "Create order successfully" : "",
-    };
+    const status = order ? 201 : 409;
+    return res.status(status).json({
+      message: order ? "Create order successfully" : "Has error when create order",
+    });
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const getOrder = async (user) => {
+const getOrder = async (user, res) => {
   try {
     const orders = await user.getOrders({
       attributes: {
-        exclude: ["createdAt", "updatedAt", "userId"],
+        exclude: ["createdAt", "updatedAt"],
       },
-      include: [
-        { model: db.Product, attributes: ["id", "title", "price", "imageUrl", "category"] },
-      ],
+      include: [ {
+        model: db.Product,
+        through: {
+          attributes: {
+            exclude: ["orderId", "prodId", "createdAt", "updatedAt"],
+          },
+        },
+        attributes: {
+          exclude: ["available", "description", "dateOfManufacture", "madeIn", "certificate", "fileName", "createdAt", "updatedAt"],
+        },
+      }],
+      // include: [
+      //   { model: db.Product, attributes: ["id", "title", "price", "imageUrl", "category"] },
+      // ],
     });
-    return {
+    const status = orders.length > 0 ? 200 : 404;
+    return res.status(status).json({
       message: orders.length > 0 ? "Get order successfully" : "No order in your account",
-      userData: user,
       ordersData: orders
-    };
+    });
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const cancelOrder = async(user, orderId) => {
+const cancelOrder = async(user, orderId, res) => {
   try {
     const order = await db.Order.findOne({
       where: { id: orderId, userId: user.id },
     });
 
     if (!order) {
-      return { message: "Order not found" };
+      return res.status(404).json({
+        message: "Order not found",
+      });
     }
     if (order.status === "cancelled") {
-      return { message: "Order has already been cancelled" };
+      return res.status(400).json({
+        message: "Order has already been cancelled"
+      });
     }
     
     order.status = "cancelled";
     await order.save();
 
-    return {
+    return res.status(200).json({
       message: "Order cancelled successfully",
-    };
+    });
   } catch (error) {
     throw new Error(error)
   }

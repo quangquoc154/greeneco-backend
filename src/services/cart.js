@@ -1,6 +1,6 @@
 const db = require("../models");
 
-const addToCart = async (user, { prodId, quantity }) => {
+const addToCart = async (user, { prodId, quantity }, res) => {
   try {
     let newQuantity = +quantity;
     const cart = await user.getCart();
@@ -19,44 +19,55 @@ const addToCart = async (user, { prodId, quantity }) => {
     // Calculate total amount of cart
     const products = await cart.getProducts();
     const totalAmount = products.reduce((sum, product) => sum + (product.price * product.CartItem.quantity), 0);
-    // products.map(product => {
-    //   totalAmount += product.price * product.CartItem.quantity
-    // })
+    
     await cart.update({
       totalAmount: totalAmount
     })
 
-    return {
+    const status = product ? 200 : 404;
+    return res.status(status).json({
       message: product ? "Add to cart successfully" : "Has error when add product to cart",
-    }
+    });
   } catch (error) {
     throw new Error(error)
   }
 };
 
-const getCart = async(user) => {
+const getCart = async(user, res) => {
   try {
     const cart = await user.getCart({
       attributes: {
         exclude: ["createdAt", "updatedAt"],
-      }
+      },
+      include: [ {
+        model: db.Product,
+        through: {
+          attributes: {
+            exclude: ["cartId", "prodId", "createdAt", "updatedAt"],
+          },
+        },
+        attributes: {
+          exclude: ["available", "description", "dateOfManufacture", "madeIn", "certificate", "fileName", "createdAt", "updatedAt"],
+        },
+      }]
     });
-    const products = await cart.getProducts({
-      attributes: {
-        exclude: ["available", "dateOfManufacture", "madeIn", "certificate", "fileName", "createdAt", "updatedAt"],
-      }
-    });
-    return {
-      message: products.length > 0 ? "Get item in cart successfully" : "No product in cart",
+    // const products = await cart.getProducts({
+    //   attributes: {
+    //     exclude: ["available", "description","dateOfManufacture", "madeIn", "certificate", "fileName", "createdAt", "updatedAt"],
+    //   },
+    // });
+    const status = product ? 200 : 404;
+    return res.status(status).json({
+      message: cart.Products.length > 0 ? "Get item in cart successfully" : "No product in cart",
       cartData: cart,
-      productsData: products
-    };
+      // productsData: products
+    });
   } catch (error) {
     throw new Error(error)
   }
 };
 
-const deleteCartItem = async(user, prodId) => {
+const deleteCartItem = async(user, prodId, res) => {
   try {
     const cart = await user.getCart();
     const [product] = await cart.getProducts({
@@ -64,9 +75,11 @@ const deleteCartItem = async(user, prodId) => {
     })
     console.log(product);
     await product.CartItem.destroy();
-    return {
-      message: "Delete item in cart successfully",
-    };
+
+    const status = product ? 200 : 404;
+    return res.status(status).json({
+      message: product ? "Delete item in cart successfully" : "Product id not found",
+    });
   } catch (error) {
     throw new Error(error)
   }

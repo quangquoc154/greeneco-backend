@@ -39,8 +39,8 @@ const addProduct = async (req, res) => {
         message: error.details[0].message,
       });
     }
-    const response = await productService.createNewProduct(req.body, fileData);
-    return res.status(200).json(response);
+    const response = await productService.createNewProduct(req.body, fileData, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -59,8 +59,8 @@ const editProduct = async (req, res) => {
         message: error.details[0].message,
       });
     }
-    const response = await productService.editProduct(req.body, fileData);
-    return res.status(200).json(response);
+    const response = await productService.editProduct(req.body, fileData, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -77,8 +77,8 @@ const deleteProduct = async (req, res) => {
     //     message: error.details[0].message,
     //   });
     // }
-    const response = await productService.deleteProduct(req.query.prodId, req.query.fileName);
-    return res.status(200).json(response);
+    const response = await productService.deleteProduct(req.query.prodId, req.query.fileName, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -89,8 +89,8 @@ const deleteProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
   try {
-    const response = await productService.getProducts(req.query);
-    return res.status(200).json(response);
+    const response = await productService.getProducts(req.query, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({

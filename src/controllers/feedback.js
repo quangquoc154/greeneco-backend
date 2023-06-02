@@ -8,8 +8,8 @@ const createFeedBack = async (req, res) => {
         message: "Missing input",
       });
     }
-    const response = await feedbackService.createFeedback(req.user, req.body);
-    return res.status(200).json(response);
+    const response = await feedbackService.createFeedback(req.user, req.body, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -26,8 +26,8 @@ const editFeedback = async (req, res) => {
         message: "Missing input",
       });
     }
-    const response = await feedbackService.editFeedback(req.user, req.body);
-    return res.status(200).json(response);
+    const response = await feedbackService.editFeedback(req.user, req.body, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -44,8 +44,8 @@ const deleteFeedback = async (req, res) => {
         message: "Missing input",
       });
     }
-    const response = await feedbackService.deleteFeedback(req.user, req.body);
-    return res.status(200).json(response);
+    const response = await feedbackService.deleteFeedback(req.user, req.body, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -56,8 +56,8 @@ const deleteFeedback = async (req, res) => {
 
 const getFeedbacks = async (req, res) => {
   try {
-    const response = await feedbackService.getFeedbacks(req.query);
-    return res.status(200).json(response);
+    const response = await feedbackService.getFeedbacks(req.query, res);
+    return response;
   } catch (error) {
     console.log(error);
     return res.status(500).json({

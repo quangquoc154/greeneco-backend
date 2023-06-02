@@ -3,8 +3,8 @@ const orderService = require("../services/order")
 
 const createOrder = async (req, res) => {
   try {
-    const response = await orderService.createOrder(req.user, req.body)
-    res.status(200).json(response);
+    const response = await orderService.createOrder(req.user, req.body, res)
+    return response;
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -15,8 +15,8 @@ const createOrder = async (req, res) => {
 
 const createOrderFormCart = async (req, res) => {
   try {
-    const response = await orderService.createOrderFormCart(req.user, req.body)
-    res.status(200).json(response);
+    const response = await orderService.createOrderFormCart(req.user, req.body, res)
+    return response;
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -27,8 +27,8 @@ const createOrderFormCart = async (req, res) => {
 
 const getOrder = async (req, res) => {
   try {
-    const response = await orderService.getOrder(req.user);
-    res.status(200).json(response);
+    const response = await orderService.getOrder(req.user, res);
+    return response;
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -39,8 +39,8 @@ const getOrder = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
   try {
-    const response = await orderService.cancelOrder(req.user, req.params.orderId);
-    res.status(200).json(response);
+    const response = await orderService.cancelOrder(req.user, req.params.orderId, res);
+    return response;
   } catch (error) {
     console.log(error);
     res.status(500).json({
