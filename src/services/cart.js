@@ -47,7 +47,7 @@ const getCart = async(user) => {
       }
     });
     return {
-      message: cart.length > 0 ? "Get item in cart successfully" : "No product in cart",
+      message: products.length > 0 ? "Get item in cart successfully" : "No product in cart",
       cartData: cart,
       productsData: products
     };
