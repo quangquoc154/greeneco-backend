@@ -2,6 +2,7 @@ const db = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
+const sendEmail = require("../utils/sendEmail");
 
 const register = async ({ email, password, fullname, address, phone }, res) => {
   try {
@@ -13,8 +14,6 @@ const register = async ({ email, password, fullname, address, phone }, res) => {
         fullname,
         email,
         password: hashPassword,
-        address,
-        phone,
         roleId: 2,
       },
     });
@@ -110,5 +109,6 @@ module.exports = {
   login,
   register,
   refreshToken,
-  logout
+  logout,
+  forgotPassword
 };

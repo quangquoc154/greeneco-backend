@@ -1,11 +1,11 @@
 const authServices = require("../services/auth");
 const joi = require("joi");
-const { email, password, fullname, address, phone, refreshToken } = require("../helpers/joi_schema");
+const { email, password, fullname, refreshToken } = require("../helpers/joi_schema");
 
 const register = async (req, res) => {
   try {
     // Validate data
-    const { error } = joi.object({ email, password, fullname, address, phone }).validate(req.body);
+    const { error } = joi.object({ email, password, fullname }).validate(req.body);
     if (error)
       return res.status(400).json({
         message: error.details[0].message,
@@ -68,9 +68,25 @@ const logout = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  try {
+    const { error } = joi.object({ email }).validate(req.body);
+    if (error)
+      return res.status(400).json({
+        message: error.details[0].message,
+      });
+    const response = await authServices.forgotPassword(req.body.email, res);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   login,
   register,
   refreshTokenCrl,
   logout,
+  forgotPassword
 };
