@@ -110,5 +110,4 @@ module.exports = {
   register,
   refreshToken,
   logout,
-  forgotPassword
 };
