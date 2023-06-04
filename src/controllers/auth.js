@@ -88,5 +88,4 @@ module.exports = {
   register,
   refreshTokenCrl,
   logout,
-  forgotPassword
 };
