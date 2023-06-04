@@ -34,6 +34,8 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       refreshToken: Sequelize.STRING,
+      resetExpires: DataTypes.BIGINT,
+      otpCode: DataTypes.STRING,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

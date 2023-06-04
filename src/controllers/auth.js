@@ -68,24 +68,41 @@ const logout = async (req, res) => {
   }
 };
 
-// const forgotPassword = async (req, res) => {
-//   try {
-//     const { error } = joi.object({ email }).validate(req.body);
-//     if (error)
-//       return res.status(400).json({
-//         message: error.details[0].message,
-//       });
-//     const response = await authServices.forgotPassword(req.body.email, res);
-//     return response;
-//   } catch (error) {
-//     console.log(error);
-//     throw new Error(error);
-//   }
-// };
+const forgotPassword = async (req, res) => {
+  try {
+    const { error } = joi.object({ email }).validate(req.body);
+    if (error)
+      return res.status(400).json({
+        message: error.details[0].message,
+      });
+    const response = await authServices.forgotPassword(req.body.email, res);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    
+    if (!req.body.password || !req.body.otp)
+      return res.status(400).json({
+        message: "Password and OTP is required",
+      });
+    const response = await authServices.resetPassword(req.body, res);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   login,
   register,
   refreshTokenCrl,
   logout,
+  forgotPassword,
+  resetPassword
 };
