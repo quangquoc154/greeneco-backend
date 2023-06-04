@@ -105,6 +105,55 @@ const logout = async ( refreshToken, res ) => {
   }
 }
 
+// const forgotPassword = async (email, res) => {
+//   try {
+//     const user = db.User.findOne({
+//       where: { email: email }
+//     })
+//     if (!user) {
+//       return res.status(400).json({
+//         message: "Email hasn't been registered"
+//       });
+//     }
+//     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+//     const html = `OTP ${otp}`
+//     const rs = await sendEmail({
+//       email,
+//       html
+//     });
+    
+//     return res.status(200).json({
+//       message: "Send to your email successfully",
+//       otp: otp
+//     });
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
+
+// const verifyOtp = async () => {
+//   try {
+//     const email = req.body.email;
+//   const otp = req.body.otp;
+
+//   // Kiểm tra mã OTP có đúng không
+//   if (otp === otpCodes[email]) {
+//     // Mã OTP đúng, cho phép reset mật khẩu
+//     // ...
+
+//     res.send('OTP verified successfully!');
+//   } else {
+//     res.status(400).send('Invalid OTP!');
+//   }
+//     return {
+//       err: user ? 0 : 1,
+//       message: user ? "Send to your email successfully" : "Email hasn't been registered"
+//     }
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
+
 module.exports = {
   login,
   register,

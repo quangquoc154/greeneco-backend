@@ -75,7 +75,7 @@ exports.getProducts = async ({page, limit, order, name, category, price, priceGt
       queries.limit = +limit
     }
     if(order) queries.order = [order]
-    if(name) query.title = {[Op.substring]: name}
+    if(name) query.title = {[Op.iLike]: `${name}%`}
     if(category) query.title = {[Op.substring]: category}
     if(price) query.price = {[Op.eq]: price}
     if(priceGte && priceLte) query.price = {[Op.between]: [priceGte, priceLte]}
@@ -91,7 +91,7 @@ exports.getProducts = async ({page, limit, order, name, category, price, priceGt
     });
     const status = products ? 200 : 404;
     return res.status(status).json({
-      message: products ? "Fetch product successfully" : "No product in database",
+      message: products.length > 0 ? "Fetch product successfully" : "No product in database",
       productData: products
     });
   } catch (error) {

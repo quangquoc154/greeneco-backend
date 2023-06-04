@@ -60,7 +60,7 @@ exports.getUsers = async ({ page, limit, order, fullName, ...query }, res) => {
       queries.limit = +limit
     }
     if(order) queries.order = [order]
-    if(fullName) query.fullName = {[Op.substring]: fullName}
+    if(fullName) query.fullName = {[Op.iLike]: `${fullName}%`}
 
     const users = await db.User.findAll({
       where: query,
