@@ -8,9 +8,10 @@ const router = express.Router();
 // PROTECTED ROUTES
 router.use(verifyToken);
 router.get("/", userControllers.getCurrentUser);
-router.put("/edit-user", userControllers.editUser);
+router.put("/edit-profile", userControllers.editCurrentUser);
 
 router.use(isAdmin);
+router.put("/edit-user", userControllers.editUser);
 router.get("/users", userControllers.getUsers);
 router.delete("/delete-user", userControllers.deleteUser);
 

@@ -5,7 +5,20 @@ const { userId } = require('../helpers/joi_schema')
 const getCurrentUser = async (req, res) => {
   try {
     const { id } = req.user;
-    const response = await userServices.getUser(id, res);
+    const response = await userServices.getCurrentUser(id, res);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+const editCurrentUser = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const response = await userServices.editCurrentUser(id, req.body, res);
     return response;
   } catch (error) {
     console.log(error);
@@ -68,4 +81,5 @@ module.exports = {
   editUser,
   deleteUser,
   getUsers,
+  editCurrentUser
 };

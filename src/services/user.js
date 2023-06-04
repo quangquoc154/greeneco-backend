@@ -1,7 +1,8 @@
 const { Op } = require("sequelize");
 const db = require("../models");
+const bcrypt = require("bcryptjs");
 
-exports.getUser = async (userId, res) => {
+exports.getCurrentUser = async (userId, res) => {
   try {
     const user = await db.User.findOne({
       where: { id: userId },
@@ -22,14 +23,31 @@ exports.getUser = async (userId, res) => {
   }
 };
 
+exports.editCurrentUser = async (userId, { password, ...body }, res) => {
+  try {
+    if (password) {
+      body.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8)); 
+    }
+    const user = await db.User.update(body, {
+      where: { id: userId },
+    });
+    const status = user[0] === 1 ? 200 : 404;
+    return res.status(status).json({
+      message: user[0] === 1 ? "Update successfully" : "User id not found",
+    })
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 exports.editUser = async ({ id, ...body }, res) => {
   try {
     const user = await db.User.update(body, {
       where: { id: id },
     });
-    const status = user ? 200 : 404;
+    const status = user[0] > 0 ? 200 : 404;
     return res.status(status).json({
-      message: user ? "Update successfully" : "User id not found",
+      message: user[0] > 0 ? "Update successfully" : "User id not found",
     })
   } catch (error) {
     throw new Error(error);
@@ -42,9 +60,9 @@ exports.deleteUser = async (id, res) => {
       where: { id: id },
     });
     console.log(user);
-    const status = user ? 200 : 404;
+    const status = user > 0 ? 200 : 404;
     return res.status(status).json({
-      message: user ? "Delete successfully" : "User id not found",
+      message: user > 0 ? "Delete successfully" : "User id not found",
     })
   } catch (error) {
     throw new Error(error);
