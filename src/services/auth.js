@@ -109,17 +109,18 @@ const logout = async ( refreshToken, res ) => {
 
 const forgotPassword = async (email, res) => {
   try {
-    const user = db.User.findOne({
+    const user = await db.User.findOne({
       where: { email: email }
     })
     if (!user) {
-      return res.status(400).json({
+      console.log(user);
+      return res.status(404).json({
         message: "Email hasn't been registered"
       });
     }
     
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const resetExpires = Date.now() + 15 * 60 * 1000;
+    const resetExpires = Date.now() + 5 * 60 * 1000;
     await db.User.update({
       resetExpires: resetExpires,
       otpCode: otp
@@ -134,7 +135,7 @@ const forgotPassword = async (email, res) => {
             <a href="" style="display:block;font-size:1.9em;color: #7fad39;text-decoration:none;font-weight:600;text-align:center">GreenEco</a>
           </div>
           <p style="font-size:1.1em">Hi,</p>
-          <p>Thank you for choosing GreenEco website. Please get the OTP below to reset your password. This OTP will expire 15 minutes from now.</p>
+          <p>Thank you for choosing GreenEco website. Please get the OTP below to reset your password. This OTP will expire 5 minutes from now.</p>
           <h2 style="background: #7fad39;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${otp}</h2>
           <p style="font-size:0.9em;">Regards,<br />GreenEco</p>
           <hr style="border:none;border-top:1px solid #eee" />
@@ -150,7 +151,6 @@ const forgotPassword = async (email, res) => {
       email,
       html
     });
-    
     return res.status(200).json({
       message: "Send to your email successfully",
       otp: otp,
