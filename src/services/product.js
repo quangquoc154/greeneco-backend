@@ -89,8 +89,7 @@ exports.getProducts = async ({page, limit, order, name, category, price, priceGt
         exclude: ["createdAt", "updatedAt"],
       }
     });
-    const status = products ? 200 : 404;
-    return res.status(status).json({
+    return res.status(200).json({
       message: products.length > 0 ? "Fetch product successfully" : "No product in database",
       productData: products
     });

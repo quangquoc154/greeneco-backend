@@ -7,18 +7,13 @@ const createOrder = async (user, { paymentMethod, name, address, phone, prodId, 
     const totalPrice = product.price * +quantity;
     totalAmount += totalPrice;
 
-    if (!name && !address && !phone) {
-      name = user.fullname,
-      address = user.address,
-      phone = user.phone
-    }
     // Create new order
     const order = await user.createOrder({
       totalAmount: totalAmount,
       paymentMethod: paymentMethod,
-      name: name,
-      address: address,
-      phone: phone,
+      name: name || user.fullname,
+      address: address || user.address,
+      phone: phone || user.phone,
       status: "Ordered"
     });
 
@@ -43,18 +38,13 @@ const createOrderFormCart = async (user, { paymentMethod, name, address, phone }
     const cart = await user.getCart();
     const products = await cart.getProducts();
 
-    if (!name && !address && !phone) {
-      name = user.fullname,
-      address = user.address,
-      phone = user.phone
-    }
     // Create new order
     const order = await user.createOrder({
       totalAmount: cart.totalAmount,
       paymentMethod: paymentMethod,
-      name: name,
-      address: address,
-      phone: phone,
+      name: name || user.fullname,
+      address: address || user.address,
+      phone: phone || user.phone,
       status: "Ordered"
     });
 
@@ -100,8 +90,7 @@ const getOrder = async (user, res) => {
       //   { model: db.Product, attributes: ["id", "title", "price", "imageUrl", "category"] },
       // ],
     });
-    const status = orders.length > 0 ? 200 : 404;
-    return res.status(status).json({
+    return res.status(200).json({
       message: orders.length > 0 ? "Get order successfully" : "No order in your account",
       ordersData: orders
     });

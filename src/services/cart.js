@@ -56,11 +56,9 @@ const getCart = async(user, res) => {
     //     exclude: ["available", "description","dateOfManufacture", "madeIn", "certificate", "fileName", "createdAt", "updatedAt"],
     //   },
     // });
-    const status = product ? 200 : 404;
-    return res.status(status).json({
+    return res.status(200).json({
       message: cart.Products.length > 0 ? "Get item in cart successfully" : "No product in cart",
       cartData: cart,
-      // productsData: products
     });
   } catch (error) {
     throw new Error(error)
