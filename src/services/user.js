@@ -23,10 +23,19 @@ exports.getCurrentUser = async (userId, res) => {
   }
 };
 
-exports.editCurrentUser = async (userId, { password, ...body }, res) => {
+exports.editCurrentUser = async (userId, { olePassword, newPassword, ...body }, res) => {
   try {
-    if (password) {
-      body.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8)); 
+    if (olePassword && newPassword) {
+      const user = await db.User.findOne({
+        where: { id: userId }
+      })
+      const isChecked = user && bcrypt.compareSync(olePassword, user.password);
+      if (!isChecked) {
+        return res.status(401).json({
+          message: "Ole Password was incorrect",
+        })
+      }
+      body.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(8)); 
     }
     const user = await db.User.update(body, {
       where: { id: userId },
