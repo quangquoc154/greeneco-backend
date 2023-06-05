@@ -49,10 +49,10 @@ exports.editCurrentUser = async (userId, { olePassword, newPassword, ...body }, 
   }
 };
 
-exports.editUser = async ({ id, ...body }, res) => {
+exports.editUser = async (userId, body, res) => {
   try {
     const user = await db.User.update(body, {
-      where: { id: id },
+      where: { id: userId },
     });
     const status = user[0] > 0 ? 200 : 404;
     return res.status(status).json({
@@ -63,10 +63,10 @@ exports.editUser = async ({ id, ...body }, res) => {
   }
 };
 
-exports.deleteUser = async (id, res) => {
+exports.deleteUser = async (userId, res) => {
   try {
     const user = await db.User.destroy({
-      where: { id: id },
+      where: { id: userId },
     });
     console.log(user);
     const status = user > 0 ? 200 : 404;

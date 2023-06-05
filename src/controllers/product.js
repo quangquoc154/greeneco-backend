@@ -52,14 +52,14 @@ const addProduct = async (req, res) => {
 const editProduct = async (req, res) => {
   try {
     const fileData = req.file;
-    const { error } = joi.object({ prodId }).validate({ prodId: req.body.id });
+    const { error } = joi.object({ prodId }).validate({ prodId: req.params.prodId });
     if (error) {
       if (fileData) cloudinary.uploader.destroy(fileData.filename);
       return res.status(400).json({
         message: error.details[0].message,
       });
     }
-    const response = await productService.editProduct(req.body, fileData, res);
+    const response = await productService.editProduct(req.params.prodId, req.body, fileData, res);
     return response;
   } catch (error) {
     console.log(error);

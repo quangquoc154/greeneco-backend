@@ -30,13 +30,13 @@ const editCurrentUser = async (req, res) => {
 
 const editUser = async (req, res) => {
   try {
-    const { error } = joi.object({ userId }).validate({ userId: req.body.id });
+    const { error } = joi.object({ userId }).validate({ userId: req.params.userId });
     if (error) {
       return res.status(400).json({
         message: error.details[0].message,
       });
     }
-    const response = await userServices.editUser(req.body, res);
+    const response = await userServices.editUser(req.params.userId, req.body, res);
     return response;
   } catch (error) {
     console.log(error);
@@ -48,13 +48,13 @@ const editUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const { error } = joi.object({ userId }).validate({ userId: req.query.id });
+    const { error } = joi.object({ userId }).validate({ userId: req.query.userId });
     if (error) {
       return res.status(400).json({
         message: error.details[0].message,
       });
     }
-    const response = await userServices.deleteUser(req.query.id, res);
+    const response = await userServices.deleteUser(req.query.userId, res);
     return response;
   } catch (error) {
     console.log(error);

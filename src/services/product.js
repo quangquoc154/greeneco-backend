@@ -26,13 +26,13 @@ exports.createNewProduct = async (body, fileData, res) => {
   }
 };
 
-exports.editProduct = async ({ id, ...body }, fileData, res) => {
+exports.editProduct = async (prodId, body, fileData, res) => {
   try {
     if (fileData) {
       body.imageUrl = fileData?.path;
       body.fileName = fileData?.filename
     }
-    const product = await db.Product.update(body, { where: { id: id } });
+    const product = await db.Product.update(body, { where: { id: prodId } });
     if (fileData && product[0] === 0)
       cloudinary.uploader.destroy(fileData.filename);
 
