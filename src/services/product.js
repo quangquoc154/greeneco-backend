@@ -77,8 +77,13 @@ exports.getProducts = async ({page, limit, order, name, category, price, priceGt
     if(order) queries.order = [order]
     if(name) query.title = {[Op.iLike]: `${name}%`}
     if(category) query.title = {[Op.substring]: category}
-    if(price) query.price = {[Op.eq]: price}
-    if(priceGte && priceLte) query.price = {[Op.between]: [priceGte, priceLte]}
+    if(price) query.price = {[Op.eq]: +price}
+    if(priceGte && !priceLte) {
+      query.price = {[Op.gte]: +priceGte}
+    } else if (!priceGte && priceLte) {
+      query.price = {[Op.lte]: +priceLte}
+    }
+    if(priceGte && priceLte) query.price = {[Op.between]: [+priceGte, +priceLte]}
     
     const products = await db.Product.findAll({
       where: query,
