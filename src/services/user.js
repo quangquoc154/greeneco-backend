@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const db = require("../models");
 const bcrypt = require("bcryptjs");
+const sendMail = require("../utils/sendMail");
 
 exports.getCurrentUser = async (userId, res) => {
   try {
@@ -110,3 +111,34 @@ exports.getUsers = async ({ page, limit, order, fullName, ...query }, res) => {
     throw new Error(error);
   }
 };
+
+exports.sendContact = async ({ name, email, message }, res) => {
+  try {
+    const html = `
+        <div style="max-width: 600px; margin: 20px auto; padding: 20px; background-color: #f2f2f2; border: 1px solid #e0e0e0; border-radius: 5px;">
+        <h2 style="text-align: center; color: #7fad39; margin-top: 0;">Email Contact</h2>
+        <p style="margin-bottom: 10px;"><strong>Name:</strong> ${name}</p>
+        <p style="margin-bottom: 10px;"><strong>Email:</strong> ${email}</p>
+        <p style="margin-bottom: 20px;"><strong>Message:</strong> ${message}</p>
+        <div style="text-align: right; color: #999999; font-size: 10px;">
+          <p style="margin-bottom: 5px; color: #666666;">GreenEco Inc</p>
+          <p style="margin-bottom: 5px; color: #666666;">254, Nguyen Van Linh Street,<br/> Thanh Khue District, Da Nang City</p>
+          <p style="color: #666666;">Vietnam</p>
+        </div>
+      </div>
+    `
+    const rs = await sendMail({
+      email: "quangquoc1542002@gmail.com",
+      html,
+      subject: `Notification: New contact from <${email}>`
+    });
+    return res.status(200).json({
+      message: "Send to email contact successfully",
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+

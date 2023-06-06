@@ -5,6 +5,8 @@ const { isAdmin } = require("../middlewares/verify_roles");
 
 const router = express.Router();
 
+router.post("/send-contact", userControllers.sendContact);
+
 // PROTECTED ROUTES
 router.use(verifyToken);
 router.get("/", userControllers.getCurrentUser);

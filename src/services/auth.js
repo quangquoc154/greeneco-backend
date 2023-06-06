@@ -134,7 +134,7 @@ const forgotPassword = async (email, res) => {
           <div style="border-bottom:1px solid #eee">
             <a href="" style="display:block;font-size:1.9em;color: #7fad39;text-decoration:none;font-weight:600;text-align:center">GreenEco</a>
           </div>
-          <p style="font-size:1.1em">Hi,</p>
+          <p style="font-size:1.1em">Hi, ${user.fullname}</p>
           <p>Thank you for choosing GreenEco website. Please get the OTP below to reset your password. This OTP will expire 5 minutes from now.</p>
           <h2 style="background: #7fad39;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${otp}</h2>
           <p style="font-size:0.9em;">Regards,<br />GreenEco</p>
@@ -149,7 +149,8 @@ const forgotPassword = async (email, res) => {
     `
     const rs = await sendMail({
       email,
-      html
+      html,
+      subject: "Forgot password",
     });
     return res.status(200).json({
       message: "Send to your email successfully",

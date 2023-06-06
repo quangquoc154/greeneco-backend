@@ -76,10 +76,23 @@ const getUsers = async (req, res) => {
   }
 };
 
+const sendContact = async (req, res) => {
+  try {
+    const response = await userServices.sendContact(req.body, res);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   getCurrentUser,
   editUser,
   deleteUser,
   getUsers,
-  editCurrentUser
+  editCurrentUser,
+  sendContact
 };
