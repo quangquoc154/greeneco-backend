@@ -24,13 +24,13 @@ exports.getCurrentUser = async (userId, res) => {
   }
 };
 
-exports.editCurrentUser = async (userId, { olePassword, newPassword, ...body }, res) => {
+exports.editCurrentUser = async (userId, { oldPassword, newPassword, ...body }, res) => {
   try {
-    if (olePassword && newPassword) {
+    if (oldPassword && newPassword) {
       const user = await db.User.findOne({
         where: { id: userId }
       })
-      const isChecked = user && bcrypt.compareSync(olePassword, user.password);
+      const isChecked = user && bcrypt.compareSync(oldPassword, user.password);
       if (!isChecked) {
         return res.status(401).json({
           message: "Ole Password was incorrect",
