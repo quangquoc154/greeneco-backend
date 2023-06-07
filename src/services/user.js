@@ -43,7 +43,7 @@ exports.editCurrentUser = async (userId, { oldPassword, newPassword, ...body }, 
     });
     const status = user[0] === 1 ? 200 : 404;
     return res.status(status).json({
-      message: user[0] === 1 ? "Update successfully" : "User id not found",
+      message: user[0] === 1 ? "Update successfully" : "There was an error from the input field from body",
     })
   } catch (error) {
     throw new Error(error);
