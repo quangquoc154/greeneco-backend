@@ -33,7 +33,7 @@ exports.editCurrentUser = async (userId, { oldPassword, newPassword, ...body }, 
       const isChecked = user && bcrypt.compareSync(oldPassword, user.password);
       if (!isChecked) {
         return res.status(401).json({
-          message: "Ole Password was incorrect",
+          message: "Old Password was incorrect",
         })
       }
       body.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(8)); 
