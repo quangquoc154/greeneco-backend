@@ -36,10 +36,10 @@ exports.editProduct = async (prodId, body, fileData, res) => {
     if (fileData && product[0] === 0)
       cloudinary.uploader.destroy(fileData.filename);
 
-    const status = product[0] > 0 ? 200 : 404;
+    const status = product[0] === 1 ? 200 : 404;
     console.log(product);
     return res.status(status).json({
-      message: product[0] === 0 ? "Update successfully" : "Product id not found",
+      message: product[0] === 1 ? "Update successfully" : "Product id not found",
     });
   } catch (error) {
     if (fileData && product[0] === 0)
