@@ -54,6 +54,24 @@ const deleteFeedback = async (req, res) => {
   }
 };
 
+const getFeedback = async (req, res) => {
+  try {
+    const { prodId } = req.params;
+    if (!prodId) {
+      return res.status(400).json({
+        message: "Missing input",
+      });
+    }
+    const response = await feedbackService.getFeedback(req.params.prodId, res);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 const getFeedbacks = async (req, res) => {
   try {
     const response = await feedbackService.getFeedbacks(req.query, res);
@@ -70,5 +88,6 @@ module.exports = {
     createFeedBack,
     editFeedback,
     deleteFeedback,
+    getFeedback,
     getFeedbacks
 }

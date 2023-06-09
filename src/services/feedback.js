@@ -53,6 +53,27 @@ const deleteFeedback = async (user, { prodId }, res) => {
   }
 };
 
+const getFeedback = async (prodId, res) => {
+  try {
+    const feedback = await db.Feedback.findAll({
+      where: { prodId: prodId },
+      attributes: {
+        exclude: ["userId", "prodId"],
+      },
+      include: [
+        { model: db.User, attributes: ["id", "fullname", "email"] },
+      ],
+    })
+    const status = feedback.length > 0 ? 200 : 404;
+    return res.status(status).json({
+      message: feedback.length > 0 ? "Get feedback successfully" : "There are no feedbacks for this product yet",
+      feedbackData: feedback
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const getFeedbacks = async ({ page, limit, order, rating, ratingGte, ratingLte, ...query }, res) => {
   try {
     const queries = {raw: true, nes: true}
@@ -77,13 +98,13 @@ const getFeedbacks = async ({ page, limit, order, rating, ratingGte, ratingLte, 
         { model: db.Role, attributes: ["id", "code", "value"] },
       ],
       include: [
-        { model: db.User, attributes: ["fullname", "email", "createdAt", "updatedAt"] },
+        { model: db.User, attributes: ["fullname", "email"] },
         { model: db.Product, attributes: ["title", "price", "imageUrl", "dateOfManufacture"] },
       ],
     });
-    const status = feedback ? 200 : 404;
+    const status = feedback.length > 0 ? 200 : 404;
     return res.status(status).json({
-      message: feedback ? "Fetch feedback successfully" : "No feedback in database",
+      message: feedback.length > 0 ? "Fetch feedback successfully" : "No feedback in database",
       feedbackData: feedback
     });
   } catch (error) {
@@ -95,5 +116,6 @@ module.exports = {
     createFeedback,
     editFeedback,
     deleteFeedback,
+    getFeedback,
     getFeedbacks
 }

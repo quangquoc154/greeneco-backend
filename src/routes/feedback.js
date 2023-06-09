@@ -6,6 +6,7 @@ const { isAdmin } = require("../middlewares/verify_roles");
 const router = express.Router();
 
 router.get("/feedbacks", feedbackControllers.getFeedbacks);
+router.get("/:prodId", feedbackControllers.getFeedback);
 // PROTECTED ROUTES
 router.use(verifyToken);
 router.post("/create-feedback", feedbackControllers.createFeedBack);
