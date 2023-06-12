@@ -6,8 +6,8 @@
 - ExpressJS: a popular NodeJS web and API framework for building efficient web applications.
 - Sequelize: a NodeJS ORM for interacting with SQL databases easily and conveniently.
 - jsonwebtoken: a NodeJS library for encoding and decoding JSON Web Tokens (JWT) used for authentication and authorization in web applications and APIs.
-- nodemailer: a NodeJS library for sending emails easily, with features like sending simple emails, sending emails with attachments, and sending bulk emails.
-- cloudinary: a cloud-based media storage service for storing, processing, and distributing multimedia files, allowing for easy upload, storage, and processing of product images.
+- Nodemailer: a NodeJS library for sending emails easily, with features like sending simple emails, sending emails with attachments, and sending bulk emails.
+- Cloudinary: a cloud-based media storage service for storing, processing, and distributing multimedia files, allowing for easy upload, storage, and processing of product images.
 
 ### II) How to run
 
