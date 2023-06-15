@@ -43,7 +43,7 @@ exports.editCurrentUser = async (userId, { oldPassword, newPassword, ...body }, 
     });
     const status = user[0] === 1 ? 200 : 404;
     return res.status(status).json({
-      message: user[0] === 1 ? "Update successfully" : "There was an error from the input field from body",
+      message: user[0] === 1 ? "Update successfully" : "Has error when update profile",
     })
   } catch (error) {
     throw new Error(error);
@@ -57,7 +57,7 @@ exports.editUser = async (userId, body, res) => {
     });
     const status = user[0] > 0 ? 200 : 404;
     return res.status(status).json({
-      message: user[0] > 0 ? "Update successfully" : "User id not found",
+      message: user[0] > 0 ? "Update successfully" : "Has error when update user",
     })
   } catch (error) {
     throw new Error(error);
@@ -72,7 +72,7 @@ exports.deleteUser = async (userId, res) => {
     console.log(user);
     const status = user > 0 ? 200 : 404;
     return res.status(status).json({
-      message: user > 0 ? "Delete successfully" : "User id not found",
+      message: user > 0 ? "Delete successfully" : "Has error when delete product",
     })
   } catch (error) {
     throw new Error(error);

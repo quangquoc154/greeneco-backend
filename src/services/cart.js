@@ -76,7 +76,7 @@ const deleteCartItem = async(user, prodId, res) => {
 
     const status = product ? 200 : 404;
     return res.status(status).json({
-      message: product ? "Delete item in cart successfully" : "Product id not found",
+      message: product ? "Delete item in cart successfully" : "Has error when delete item in cart",
     });
   } catch (error) {
     throw new Error(error)

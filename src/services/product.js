@@ -39,7 +39,7 @@ exports.editProduct = async (prodId, body, fileData, res) => {
     const status = product[0] === 1 ? 200 : 404;
     console.log(product);
     return res.status(status).json({
-      message: product[0] === 1 ? "Update successfully" : "Product id not found",
+      message: product[0] === 1 ? "Update successfully" : "Has error when update product",
     });
   } catch (error) {
     if (fileData && product[0] === 0)
@@ -60,7 +60,7 @@ exports.deleteProduct = async (prodId, fileName, res) => {
 
     const status = product > 0 ? 200 : 404;
     return res.status(status).json({
-      message: product > 0 ? `${product} product are deleted` : "Product id not found",
+      message: product > 0 ? `${product} product are deleted` : "Has error when delete product",
     });
   } catch (error) {
     throw new Error(error);
