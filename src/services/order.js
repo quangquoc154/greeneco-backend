@@ -1,3 +1,4 @@
+const { Sequelize } = require("sequelize");
 const db = require("../models");
 
 const createOrder = async (user, { paymentMethod, name, address, phone, prodId, quantity }, res) => {
@@ -24,6 +25,9 @@ const createOrder = async (user, { paymentMethod, name, address, phone, prodId, 
         totalPrice: totalPrice
       }
     });
+    await product.update({
+      available: Sequelize.literal(`available - ${+quantity}`)
+    })
     const status = order ? 201 : 409;
     return res.status(status).json({
       message: order ? "Create order successfully" : "Has error when create order",
@@ -56,6 +60,11 @@ const createOrderFormCart = async (user, { paymentMethod, name, address, phone }
           totalPrice: product.CartItem.totalPrice
         }
       });
+      await db.Product.update({
+        available: Sequelize.literal(`available - ${product.CartItem.quantity}`)
+      },{
+        where: {id: product.id}
+      })
     }
     // Delete the current cart after the order has been created
     await cart.setProducts(null);
