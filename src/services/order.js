@@ -72,9 +72,6 @@ const createOrderFormCart = async (user, { paymentMethod, name, address, phone }
 const getOrder = async (user, res) => {
   try {
     const orders = await user.getOrders({
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
       include: [ {
         model: db.Product,
         through: {
@@ -102,9 +99,6 @@ const getOrder = async (user, res) => {
 const getAllOrder = async (res) => {
   try {
     const orders = await db.Order.findAll({
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
       include: [ {
         model: db.Product,
         through: {
