@@ -33,6 +33,40 @@ const addToCart = async (user, { prodId, quantity }, res) => {
   }
 };
 
+const editQuantity = async (user, { prodId, quantity }, res) => {
+  try {
+    let newQuantity = +quantity;
+    const cart = await user.getCart();
+    const [productCart] = await cart.getProducts({
+      where: { id: prodId },
+    });
+    if (productCart) {
+      productCart.CartItem.quantity = newQuantity;
+    }
+
+    // Add product into cart (No product in cart / Exist product in cart)
+    const product = await db.Product.findByPk(prodId);
+    const totalPrice = product.price * newQuantity;
+    await cart.addProduct(product, { through: { quantity: newQuantity, totalPrice } });
+
+    // Calculate total amount of cart
+    const products = await cart.getProducts();
+    const totalAmount = products.reduce((sum, product) => sum + (product.price * product.CartItem.quantity), 0);
+    
+    await cart.update({
+      totalAmount: totalAmount
+    })
+
+    const status = product ? 200 : 404;
+    return res.status(status).json({
+      message: product ? "Edit quantity successfully" : "Has error when edit quantity cart",
+    });
+  } catch (error) {
+    throw new Error(error)
+  }
+};
+
+
 const getCart = async(user, res) => {
   try {
     const cart = await user.getCart({
@@ -85,6 +119,7 @@ const deleteCartItem = async(user, prodId, res) => {
 
 module.exports = {
   addToCart,
+  editQuantity,
   getCart,
   deleteCartItem,
 };

@@ -37,6 +37,18 @@ const getOrder = async (req, res) => {
   }
 };
 
+const getAllOrder = async (req, res) => {
+  try {
+    const response = await orderService.getAllOrder(res);
+    return response;
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 const cancelOrder = async (req, res) => {
   try {
     const response = await orderService.cancelOrder(req.user, req.params.orderId, res);
@@ -53,5 +65,6 @@ module.exports = {
     createOrder,
     createOrderFormCart, 
     getOrder,
-    cancelOrder,
+    getAllOrder,
+    cancelOrder
 };

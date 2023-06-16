@@ -99,6 +99,33 @@ const getOrder = async (user, res) => {
   }
 };
 
+const getAllOrder = async (res) => {
+  try {
+    const orders = await db.Order.findAll({
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+      include: [ {
+        model: db.Product,
+        through: {
+          attributes: {
+            exclude: ["orderId", "prodId", "createdAt", "updatedAt"],
+          },
+        },
+        attributes: {
+          exclude: ["available", "description", "dateOfManufacture", "madeIn", "certificate", "fileName", "createdAt", "updatedAt"],
+        },
+      }],
+    });
+    return res.status(200).json({
+      message: orders.length > 0 ? "Get order successfully" : "No order in database",
+      ordersData: orders
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const cancelOrder = async(user, orderId, res) => {
   try {
     const order = await db.Order.findOne({
@@ -131,5 +158,6 @@ module.exports = {
   createOrder,
   createOrderFormCart,
   getOrder,
+  getAllOrder,
   cancelOrder,
 };

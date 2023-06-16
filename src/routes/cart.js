@@ -9,6 +9,7 @@ const router = express.Router();
 router.use(verifyToken);
 router.use(createCart);
 router.post("/add-to-cart", cartControllers.addToCart);
+router.put("/edit-quantity", cartControllers.editQuantity); 
 router.get("/get-cart", cartControllers.getCart);
 router.delete("/delete-cart-item", cartControllers.deleteCartItem);
 
